@@ -2,12 +2,14 @@ import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { experience } from '../data/index.js'
 
+const smExpColors = ['#FF3131', '#FFD700', '#FF6B35', '#9B59B6', '#FF3131']
+
 function SectionHeader({ num, title }) {
   return (
-    <div className="flex items-center gap-4 mb-14">
-      <span className="font-mono text-xs text-neon-lime/50 tracking-[3px]">{num}</span>
-      <h2 className="font-display font-bold text-3xl md:text-4xl text-white tracking-tight">{title}</h2>
-      <div className="flex-1 h-px bg-gradient-to-r from-neon-lime/20 to-transparent" />
+    <div className="flex items-center gap-5 mb-14">
+      <span className="font-mono text-xs text-sm-red/40 tracking-[4px]">{num}</span>
+      <h2 className="font-display text-3xl md:text-4xl text-white tracking-[3px] uppercase">{title}</h2>
+      <div className="flex-1 h-[2px] bg-gradient-to-r from-sm-red/20 to-transparent" />
     </div>
   )
 }
@@ -17,76 +19,69 @@ export default function Experience() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="exp" className="relative py-28 px-8 md:px-16">
+    <section id="exp" className="relative py-28 px-6 md:px-16">
       <div ref={ref} className="max-w-4xl mx-auto">
-        <SectionHeader num="// 05" title="experience" />
+        <SectionHeader num="05" title="EXPERIENCE" />
 
         <div className="relative">
           {/* timeline spine */}
           <div
-            className="absolute left-0 top-2 bottom-2 w-px"
+            className="absolute left-0 top-2 bottom-2 w-[2px]"
             style={{
-              background: 'linear-gradient(to bottom, #c8ff57, #bf7aff, #ff2d78, transparent)',
+              background: 'linear-gradient(to bottom, #FF3131, #FFD700, #9B59B6, transparent)',
             }}
           />
 
           <div className="flex flex-col gap-12 pl-10">
-            {experience.map((e, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0, x: -28 }}
-                animate={inView ? { opacity: 1, x: 0 } : {}}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="relative group"
-              >
-                {/* dot on spine */}
-                <div
-                  className="absolute -left-[46px] top-1.5 w-3.5 h-3.5 rounded-full border-2 border-void"
-                  style={{
-                    background: e.accent,
-                    boxShadow: `0 0 12px ${e.accent}80`,
-                  }}
-                />
-
-                {/* card */}
-                <div
-                  className="glass rounded-xl p-6 transition-all duration-300"
-                  style={{
-                    border: `1px solid ${e.accent}18`,
-                  }}
-                  onMouseEnter={el => {
-                    el.currentTarget.style.borderColor = `${e.accent}45`
-                    el.currentTarget.style.boxShadow = `0 8px 32px ${e.accent}10`
-                  }}
-                  onMouseLeave={el => {
-                    el.currentTarget.style.borderColor = `${e.accent}18`
-                    el.currentTarget.style.boxShadow = 'none'
-                  }}
+            {experience.map((e, i) => {
+              const accent = smExpColors[i % smExpColors.length]
+              return (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -28 }}
+                  animate={inView ? { opacity: 1, x: 0 } : {}}
+                  transition={{ duration: 0.6, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                  className="relative group"
                 >
-                  {/* date */}
+                  {/* dot on spine */}
                   <div
-                    className="font-mono text-[11px] tracking-[2px] mb-2"
-                    style={{ color: e.accent }}
+                    className="absolute -left-[46px] top-1.5 w-4 h-4 rounded-full border-[3px] border-void"
+                    style={{
+                      background: accent,
+                      boxShadow: `0 0 15px ${accent}80`,
+                    }}
+                  />
+
+                  {/* card */}
+                  <div
+                    className="street-card rounded-xl p-6"
+                    style={{ border: `1px solid ${accent}12` }}
                   >
-                    {e.date}
+                    {/* date */}
+                    <div
+                      className="font-mono text-[11px] tracking-[3px] mb-2"
+                      style={{ color: accent }}
+                    >
+                      {e.date}
+                    </div>
+
+                    {/* role & company */}
+                    <h3 className="font-display text-lg text-white tracking-wider">{e.role}</h3>
+                    <div className="font-mono text-sm text-white/35 mb-4">{e.company}</div>
+
+                    {/* points */}
+                    <ul className="space-y-2.5">
+                      {e.points.map((pt, j) => (
+                        <li key={j} className="flex items-start gap-3 font-body text-sm text-white/50">
+                          <span className="mt-0.5 flex-shrink-0 text-base" style={{ color: accent }}>›</span>
+                          {pt}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-
-                  {/* role & company */}
-                  <h3 className="font-display font-bold text-lg text-white">{e.role}</h3>
-                  <div className="font-mono text-sm text-white/40 mb-4">{e.company}</div>
-
-                  {/* points */}
-                  <ul className="space-y-2">
-                    {e.points.map((pt, j) => (
-                      <li key={j} className="flex items-start gap-3 font-body text-sm text-white/55">
-                        <span style={{ color: e.accent, marginTop: '2px', flexShrink: 0 }}>›</span>
-                        {pt}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              )
+            })}
           </div>
         </div>
       </div>

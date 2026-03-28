@@ -11,9 +11,9 @@ import Footer         from './components/Footer.jsx'
 
 export default function App() {
   return (
-    <div className="min-h-screen bg-void text-white overflow-x-hidden">
-      {/* scan line effect */}
-      <div className="scanline" />
+    <div className="min-h-screen bg-void text-sm-white overflow-x-hidden relative">
+      {/* film grain overlay */}
+      <div className="grain-overlay" />
 
       {/* custom cursor */}
       <Cursor />

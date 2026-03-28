@@ -2,12 +2,14 @@ import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { projects } from '../data/index.js'
 
+const smAccents = ['#FF3131', '#FFD700', '#FF6B35', '#9B59B6']
+
 function SectionHeader({ num, title }) {
   return (
-    <div className="flex items-center gap-4 mb-14">
-      <span className="font-mono text-xs text-neon-lime/50 tracking-[3px]">{num}</span>
-      <h2 className="font-display font-bold text-3xl md:text-4xl text-white tracking-tight">{title}</h2>
-      <div className="flex-1 h-px bg-gradient-to-r from-neon-lime/20 to-transparent" />
+    <div className="flex items-center gap-5 mb-14">
+      <span className="font-mono text-xs text-sm-red/40 tracking-[4px]">{num}</span>
+      <h2 className="font-display text-3xl md:text-4xl text-white tracking-[3px] uppercase">{title}</h2>
+      <div className="flex-1 h-[2px] bg-gradient-to-r from-sm-red/20 to-transparent" />
     </div>
   )
 }
@@ -25,88 +27,75 @@ export default function Projects() {
   const inView = useInView(ref, { once: true, margin: '-80px' })
 
   return (
-    <section id="projects" className="relative py-28 px-8 md:px-16">
+    <section id="projects" className="relative py-28 px-6 md:px-16">
       <div ref={ref} className="max-w-6xl mx-auto">
-        <SectionHeader num="// 03" title="projects" />
+        <SectionHeader num="03" title="PROJECTS" />
 
         <div className="grid sm:grid-cols-2 gap-6">
-          {projects.map((p, i) => (
-            <motion.div
-              key={p.id}
-              initial={{ opacity: 0, y: 32 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: i * 0.1 }}
-              className="group relative glass rounded-2xl p-7 overflow-hidden"
-              style={{
-                border: `1px solid ${p.accent}22`,
-                transition: 'border-color 0.3s, transform 0.3s, box-shadow 0.3s',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = `${p.accent}55`
-                e.currentTarget.style.transform = 'translateY(-6px)'
-                e.currentTarget.style.boxShadow = `0 20px 60px ${p.accent}12, 0 0 40px ${p.accent}08`
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = `${p.accent}22`
-                e.currentTarget.style.transform = 'translateY(0)'
-                e.currentTarget.style.boxShadow = 'none'
-              }}
-            >
-              {/* top glow on hover */}
-              <div
-                className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{ background: `linear-gradient(90deg, transparent, ${p.accent}, transparent)` }}
-              />
-
-              {/* featured badge */}
-              {p.featured && (
-                <div
-                  className="absolute top-4 right-4 font-mono text-[10px] px-2 py-0.5 rounded-sm tracking-widest"
-                  style={{ background: `${p.accent}18`, color: p.accent, border: `1px solid ${p.accent}35` }}
-                >
-                  FEATURED
-                </div>
-              )}
-
-              <div className="font-mono text-xs tracking-[3px] text-white/20 mb-3">PROJECT_{p.id}</div>
-
-              <h3 className="font-display font-bold text-xl md:text-2xl text-white mb-3 group-hover:text-white transition-colors">
-                {p.name}
-              </h3>
-
-              <p className="font-body text-sm text-white/50 leading-relaxed mb-5">{p.desc}</p>
-
-              {/* tags */}
-              <div className="flex flex-wrap gap-2 mb-6">
-                {p.tags.map(tag => (
-                  <span
-                    key={tag}
-                    className="font-mono text-[11px] px-2 py-0.5 rounded-sm"
-                    style={{
-                      color: p.accent,
-                      background: `${p.accent}10`,
-                      border: `1px solid ${p.accent}28`,
-                    }}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* links */}
-              <a
-                href={p.github}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex items-center gap-2 font-mono text-xs text-white/40 hover:text-white transition-colors"
-                style={{ '--hover-color': p.accent }}
-                onMouseEnter={e => e.currentTarget.style.color = p.accent}
-                onMouseLeave={e => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
+          {projects.map((p, i) => {
+            const accent = smAccents[i % smAccents.length]
+            return (
+              <motion.div
+                key={p.id}
+                initial={{ opacity: 0, y: 32 }}
+                animate={inView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.6, delay: i * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="group relative street-card rounded-2xl p-7 overflow-hidden"
+                style={{ border: `1px solid ${accent}15` }}
               >
-                <GithubIcon /> View on GitHub ↗
-              </a>
-            </motion.div>
-          ))}
+                {/* top glow line on hover */}
+                <div
+                  className="absolute top-0 left-0 right-0 h-[2px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                  style={{ background: `linear-gradient(90deg, transparent, ${accent}, transparent)` }}
+                />
+
+                {/* featured badge */}
+                {p.featured && (
+                  <div
+                    className="absolute top-4 right-4 font-mono text-[9px] px-2.5 py-1 rounded tracking-[3px]"
+                    style={{ background: `${accent}15`, color: accent, border: `1px solid ${accent}30` }}
+                  >
+                    FEATURED
+                  </div>
+                )}
+
+                <div className="font-mono text-[10px] tracking-[4px] text-white/15 mb-3">PROJECT_{p.id}</div>
+
+                <h3 className="font-display text-xl md:text-2xl text-white mb-3 tracking-wider group-hover:sm-red transition-colors duration-300">
+                  {p.name}
+                </h3>
+
+                <p className="font-body text-sm text-white/45 leading-relaxed mb-5">{p.desc}</p>
+
+                {/* tags */}
+                <div className="flex flex-wrap gap-2 mb-6">
+                  {p.tags.map(tag => (
+                    <span
+                      key={tag}
+                      className="font-mono text-[10px] px-2.5 py-0.5 rounded tracking-wider"
+                      style={{
+                        color: accent,
+                        background: `${accent}0d`,
+                        border: `1px solid ${accent}20`,
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                {/* github link */}
+                <a
+                  href={p.github}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-2 font-mono text-xs text-white/35 hover:text-sm-red transition-colors duration-200"
+                >
+                  <GithubIcon /> VIEW ON GITHUB ↗
+                </a>
+              </motion.div>
+            )
+          })}
         </div>
 
         {/* view all */}
@@ -114,15 +103,15 @@ export default function Projects() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.5 }}
-          className="text-center mt-10"
+          className="text-center mt-12"
         >
           <a
             href="https://github.com/Godgiftedevil"
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center gap-2 font-mono text-sm text-white/30 hover:text-neon-lime transition-colors tracking-wider"
+            className="inline-flex items-center gap-2 font-mono text-sm text-white/25 hover:text-sm-red transition-colors duration-200 tracking-[3px]"
           >
-            view all on github ↗
+            VIEW ALL ON GITHUB ↗
           </a>
         </motion.div>
       </div>
