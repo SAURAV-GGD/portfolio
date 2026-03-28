@@ -115,6 +115,12 @@ body {
   animation: grain 0.5s steps(6) infinite;
 }
 
+/* === Blink animation for boot cursor === */
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
 /* === Horizontal rule with red glow === */
 .divider-red {
   height: 1px;
@@ -170,3 +176,160 @@ body {
     font-size: clamp(3rem, 12vw, 5rem) !important;
   }
 }
+
+/* ═══════════════════════════════════════════════
+   SKILLS BLACKOUT — Neon Flicker Animations
+   ═══════════════════════════════════════════════ */
+
+/* Neon flicker variant 1 — sharp stutter */
+.neon-flicker-0 {
+  animation: neonFlicker0 0.2s ease-in-out forwards;
+}
+@keyframes neonFlicker0 {
+  0%   { opacity: 0; transform: scale(0.7) translateX(-10px); }
+  15%  { opacity: 1; transform: scale(1.15) translateX(2px); }
+  25%  { opacity: 0.2; transform: scale(0.95); }
+  35%  { opacity: 1; transform: scale(1.05); }
+  50%  { opacity: 0.5; transform: scale(0.98); }
+  65%  { opacity: 1; transform: scale(1); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Neon flicker variant 2 — buzzy / electrical */
+.neon-flicker-1 {
+  animation: neonFlicker1 0.25s ease-in-out forwards;
+}
+@keyframes neonFlicker1 {
+  0%   { opacity: 0; filter: blur(4px); }
+  10%  { opacity: 0.8; filter: blur(0); }
+  15%  { opacity: 0; filter: blur(2px); }
+  20%  { opacity: 1; filter: blur(0); }
+  30%  { opacity: 0.3; }
+  40%  { opacity: 1; }
+  60%  { opacity: 0.7; }
+  100% { opacity: 1; filter: blur(0); }
+}
+
+/* Neon flicker variant 3 — smooth pop */
+.neon-flicker-2 {
+  animation: neonFlicker2 0.18s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+}
+@keyframes neonFlicker2 {
+  0%   { opacity: 0; transform: scale(0) rotate(-10deg); }
+  60%  { opacity: 1; transform: scale(1.2) rotate(3deg); }
+  80%  { opacity: 0.6; transform: scale(0.9) rotate(-1deg); }
+  100% { opacity: 1; transform: scale(1) rotate(0); }
+}
+
+/* CRT Scanlines overlay */
+.crt-scanlines {
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(255, 255, 255, 0.012) 2px,
+    rgba(255, 255, 255, 0.012) 4px
+  );
+  animation: scanlineScroll 8s linear infinite;
+}
+@keyframes scanlineScroll {
+  0%   { background-position: 0 0; }
+  100% { background-position: 0 1000px; }
+}
+
+/* Scanning pulse text */
+.neon-pulse-text {
+  animation: neonPulseText 0.8s ease-in-out infinite;
+}
+@keyframes neonPulseText {
+  0%, 100% {
+    opacity: 0.6;
+    text-shadow: 0 0 10px #FF3131, 0 0 20px #FF313180;
+  }
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 20px #FF3131, 0 0 40px #FF3131, 0 0 60px #FF313180;
+  }
+}
+
+/* Scan line animation bar */
+.scan-line-anim {
+  background: linear-gradient(90deg, transparent, #FF3131, transparent);
+  animation: scanLineGrow 1s ease-in-out infinite alternate;
+}
+@keyframes scanLineGrow {
+  0%   { opacity: 0.3; width: 40px; }
+  100% { opacity: 1; width: 80px; }
+}
+
+/* ═══════════════════════════════════════════════
+   HOLOGRAPHIC CARD SHIMMER
+   ═══════════════════════════════════════════════ */
+.holo-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.holo-shimmer {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  background: linear-gradient(
+    105deg,
+    transparent 20%,
+    rgba(255, 49, 49, 0.06) 32%,
+    rgba(255, 215, 0, 0.07) 40%,
+    rgba(155, 89, 182, 0.06) 48%,
+    rgba(0, 212, 255, 0.07) 56%,
+    rgba(200, 255, 87, 0.06) 64%,
+    rgba(255, 49, 49, 0.05) 72%,
+    transparent 84%
+  );
+  background-size: 250% 100%;
+}
+
+.holo-card:hover .holo-shimmer {
+  opacity: 1;
+  animation: holoSweep 2s ease infinite;
+}
+
+@keyframes holoSweep {
+  0%   { background-position: 250% 0; }
+  100% { background-position: -250% 0; }
+}
+
+/* Extra card hover lift for holo cards */
+.holo-card:hover {
+  border-color: rgba(255, 49, 49, 0.2) !important;
+  box-shadow:
+    0 12px 50px rgba(255, 49, 49, 0.08),
+    0 0 0 1px rgba(255, 49, 49, 0.1),
+    0 0 80px rgba(255, 49, 49, 0.04);
+  transform: translateY(-6px) scale(1.02);
+}
+
+/* ═══════════════════════════════════════════════
+   SKILL ROWS — minhpham-inspired interactive rows
+   ═══════════════════════════════════════════════ */
+.skill-row {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.skill-row:hover {
+  transform: scale(1.01);
+}
+
+/* Smooth word highlight for proximity text */
+.hover-word {
+  display: inline;
+  cursor: none;
+  transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+

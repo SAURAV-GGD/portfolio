@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 
+/* ──────────── Typewriter Phrases ──────────── */
 const phrases = [
   'AI BUILDER & VIBE CODER',
   'PYTHON · OPENCV · MEDIAPIPE',
@@ -10,22 +11,11 @@ const phrases = [
   'FROM IDEA → PRODUCT IN HOURS ⚡',
 ]
 
-const floaters = [
-  { text: 'PYTHON',        x: '72%', y: '22%', delay: 0 },
-  { text: 'REACT',         x: '82%', y: '52%', delay: 0.4 },
-  { text: 'GOOGLE CLOUD',  x: '65%', y: '72%', delay: 0.8 },
-  { text: 'AWS',           x: '78%', y: '36%', delay: 1.2 },
-  { text: 'SELENIUM',      x: '62%', y: '44%', delay: 0.6 },
-  { text: 'MEDIAPIPE',     x: '70%', y: '86%', delay: 1.0 },
-]
-
-const floaterColors = ['#FF3131', '#FFD700', '#FF6B35', '#9B59B6', '#F0F0F0', '#FF3131']
-
 function GlitchText() {
-  const [idx, setIdx]     = useState(0)
-  const [text, setText]   = useState('')
-  const [del, setDel]     = useState(false)
-  const timeout           = useRef(null)
+  const [idx, setIdx]   = useState(0)
+  const [text, setText] = useState('')
+  const [del, setDel]   = useState(false)
+  const timeout         = useRef(null)
 
   useEffect(() => {
     const phrase = phrases[idx]
@@ -54,66 +44,239 @@ function GlitchText() {
   )
 }
 
-const stag = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } }
-const item = { hidden: { opacity: 0, y: 30 }, show: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.25, 0.46, 0.45, 0.94] } } }
+/* ──────────── Word-level highlight on cursor proximity ──────────── */
+function InteractiveText({ children, className = '', style = {} }) {
+  const containerRef = useRef(null)
+  const [nearWord, setNearWord] = useState(-1)
 
+  const words = children.split(' ')
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+
+    const handleMouse = (e) => {
+      const spans = container.querySelectorAll('.hover-word')
+      let closest = -1
+      let minDist = 120
+
+      spans.forEach((span, i) => {
+        const rect = span.getBoundingClientRect()
+        const cx = rect.left + rect.width / 2
+        const cy = rect.top + rect.height / 2
+        const dist = Math.sqrt((e.clientX - cx) ** 2 + (e.clientY - cy) ** 2)
+        if (dist < minDist) {
+          minDist = dist
+          closest = i
+        }
+      })
+      setNearWord(closest)
+    }
+
+    const handleLeave = () => setNearWord(-1)
+
+    container.addEventListener('mousemove', handleMouse)
+    container.addEventListener('mouseleave', handleLeave)
+    return () => {
+      container.removeEventListener('mousemove', handleMouse)
+      container.removeEventListener('mouseleave', handleLeave)
+    }
+  }, [])
+
+  return (
+    <span ref={containerRef} className={className} style={style}>
+      {words.map((word, i) => (
+        <span key={i}>
+          <span
+            className="hover-word"
+            style={{
+              transition: 'color 0.25s ease, text-shadow 0.25s ease',
+              color: nearWord === i ? '#FFFFFF' : undefined,
+              textShadow: nearWord === i
+                ? '0 0 20px rgba(255,49,49,0.4), 0 0 40px rgba(255,49,49,0.15)'
+                : 'none',
+            }}
+          >
+            {word}
+          </span>
+          {i < words.length - 1 ? ' ' : ''}
+        </span>
+      ))}
+    </span>
+  )
+}
+
+/* ──────────── Motion Variants ──────────── */
+const stag = { hidden: {}, show: { transition: { staggerChildren: 0.12 } } }
+const item = {
+  hidden: { opacity: 0, y: 40 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.8, ease: [0.25, 0.46, 0.45, 0.94] },
+  },
+}
+
+/* ════════════════════════════════════════════
+   HERO SECTION
+   ════════════════════════════════════════════ */
 export default function Hero() {
   return (
-    <section id="hero" className="relative min-h-screen flex items-center overflow-hidden">
-
+    <section
+      id="hero"
+      className="relative min-h-screen flex items-center overflow-hidden"
+    >
       {/* noise texture bg */}
       <div className="absolute inset-0 noise-bg opacity-100 pointer-events-none" />
 
       {/* radial glow top */}
       <div className="absolute inset-0 glow-radial pointer-events-none" />
 
-      {/* corner accents — street style */}
-      <div className="absolute top-20 left-0 w-44 h-[2px] bg-gradient-to-r from-sm-red to-transparent" />
-      <div className="absolute top-20 left-0 h-44 w-[2px] bg-gradient-to-b from-sm-red to-transparent" />
-      <div className="absolute bottom-20 right-0 w-44 h-[2px] bg-gradient-to-l from-sm-gold to-transparent" />
-      <div className="absolute bottom-20 right-0 h-44 w-[2px] bg-gradient-to-t from-sm-gold to-transparent" />
+      {/* ── BLURRED BG IMAGE — subtle atmosphere ── */}
+      <div
+        className="absolute inset-0 pointer-events-none z-[0]"
+        style={{
+          backgroundImage: 'url(/saurav-hero.jpg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          opacity: 0.08,
+          filter: 'blur(20px) grayscale(0.4) brightness(0.5)',
+        }}
+      />
 
-      {/* large background text — oversized impact */}
-      <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none overflow-hidden">
-        <span className="font-display text-[20vw] text-white/[0.02] tracking-wider leading-none">
-          SAURAV
-        </span>
+      {/* ── FACE IMAGE — large, static, pinned top-right to bottom-right ──
+           Spans from the top of the section to where the gold accent lines
+           start (bottom: ~80px). Full opacity, no transparency on the face. */}
+      <div
+        className="absolute pointer-events-none z-[1]"
+        style={{
+          top: 0,
+          right: 0,
+          bottom: '80px',        /* stops where the gold corner accent lines start */
+          width: '48%',
+          maxWidth: '700px',
+        }}
+      >
+        {/* The actual photo — 100% opacity, clear face */}
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: 'url(/saurav-hero.jpg)',
+            backgroundSize: 'cover',
+            backgroundPosition: '50% 15%',
+            opacity: 1,
+            filter: 'contrast(1.15) brightness(0.9)',
+            maskImage:
+              'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 55%, transparent 80%), linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, rgba(0,0,0,1) 20%)',
+            WebkitMaskImage:
+              'linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.95) 25%, rgba(0,0,0,0.7) 55%, transparent 80%), linear-gradient(to top, transparent 0%, rgba(0,0,0,0.5) 8%, rgba(0,0,0,1) 20%)',
+            maskComposite: 'intersect',
+            WebkitMaskComposite: 'destination-in',
+          }}
+        />
+
+        {/* Red accent glow behind face */}
+        <div
+          className="absolute pointer-events-none"
+          style={{
+            width: '350px',
+            height: '350px',
+            right: '15%',
+            top: '25%',
+            borderRadius: '50%',
+            background:
+              'radial-gradient(circle, rgba(255,49,49,0.15) 0%, rgba(255,107,53,0.06) 50%, transparent 70%)',
+            filter: 'blur(50px)',
+          }}
+        />
+
+        {/* Warm color overlay */}
+        <div
+          className="absolute inset-0"
+          style={{
+            background:
+              'linear-gradient(160deg, transparent 30%, rgba(255,49,49,0.05) 60%, rgba(255,107,53,0.03) 100%)',
+            maskImage:
+              'linear-gradient(to left, rgba(0,0,0,1) 10%, transparent 65%)',
+            WebkitMaskImage:
+              'linear-gradient(to left, rgba(0,0,0,1) 10%, transparent 65%)',
+          }}
+        />
       </div>
 
-      {/* floating tech badges */}
-      <div className="hidden lg:block">
-        {floaters.map((f, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: f.delay + 1.2, duration: 0.5 }}
-            style={{ position: 'absolute', left: f.x, top: f.y }}
-            className="animate-float"
+      {/* ── QUOTE HIGHLIGHT: BLEND WITH BACKGROUND QUOTE ── */}
+      <div
+        className="absolute pointer-events-none z-[3] select-none"
+        style={{
+          /* Aligning slightly higher to perfectly match the typical image text placement */
+          right: '5%',
+          bottom: '12%',
+        }}
+      >
+        <div
+          className="font-display text-right leading-[0.92]"
+          style={{
+            fontSize: 'clamp(2rem, 5vw, 4rem)',
+            letterSpacing: '3px',
+            color: 'transparent', /* Makes text invisible, leaving only the glowing shadow */
+          }}
+        >
+          <span
+            className="block"
+            style={{
+              WebkitTextStroke: '1px rgba(255,49,49,0.2)',
+              textShadow: '0 0 30px rgba(255,49,49,0.5), 0 0 60px rgba(255,49,49,0.2)',
+            }}
           >
-            <div
-              className="font-mono text-[10px] tracking-[3px] px-3 py-1.5 rounded glass"
-              style={{
-                color: floaterColors[i],
-                border: `1px solid ${floaterColors[i]}30`,
-                boxShadow: `0 0 15px ${floaterColors[i]}15`,
-                animationDelay: `${f.delay}s`,
-              }}
-            >
-              {f.text}
-            </div>
-          </motion.div>
-        ))}
+            WORK
+          </span>
+          <span
+            className="block"
+            style={{
+              WebkitTextStroke: '1px rgba(255,255,255,0.1)',
+              textShadow: '0 0 30px rgba(255,255,255,0.2)',
+            }}
+          >
+            SMART
+          </span>
+          <span
+            className="block"
+            style={{
+              WebkitTextStroke: '1px rgba(255,49,49,0.2)',
+              textShadow: '0 0 30px rgba(255,49,49,0.5), 0 0 60px rgba(255,49,49,0.2)',
+            }}
+          >
+            NOT
+          </span>
+          <span
+            className="block"
+            style={{
+              WebkitTextStroke: '1px rgba(255,255,255,0.1)',
+              textShadow: '0 0 30px rgba(255,255,255,0.2)',
+            }}
+          >
+            HARD
+          </span>
+        </div>
       </div>
 
-      {/* main content */}
+      {/* corner accents */}
+      <div className="absolute top-20 left-0 w-44 h-[2px] bg-gradient-to-r from-sm-red to-transparent z-[3]" />
+      <div className="absolute top-20 left-0 h-44 w-[2px] bg-gradient-to-b from-sm-red to-transparent z-[3]" />
+      <div className="absolute bottom-20 right-0 w-44 h-[2px] bg-gradient-to-l from-sm-gold to-transparent z-[3]" />
+      <div className="absolute bottom-20 right-0 h-44 w-[2px] bg-gradient-to-t from-sm-gold to-transparent z-[3]" />
+
+      {/* main content — left side */}
       <motion.div
-        className="relative z-10 px-6 md:px-16 max-w-5xl"
+        className="relative z-10 px-6 md:px-16 max-w-3xl"
         variants={stag}
         initial="hidden"
         animate="show"
       >
-        <motion.div variants={item} className="font-mono text-[11px] tracking-[5px] text-sm-red/60 mb-6 uppercase">
+        <motion.div
+          variants={item}
+          className="font-mono text-[11px] tracking-[5px] text-sm-red/60 mb-6 uppercase"
+        >
           » HELLO WORLD · JAIPUR, INDIA
         </motion.div>
 
@@ -135,16 +298,25 @@ export default function Hero() {
           </span>
         </motion.h1>
 
-        {/* red underline accent */}
-        <motion.div variants={item} className="w-24 h-[3px] bg-gradient-to-r from-sm-red to-sm-gold mb-6" />
+        {/* accent line */}
+        <motion.div
+          variants={item}
+          className="w-24 h-[3px] bg-gradient-to-r from-sm-red to-sm-gold mb-6"
+        />
 
-        <motion.div variants={item} className="font-mono text-sm md:text-base mt-2 h-7">
+        <motion.div
+          variants={item}
+          className="font-mono text-sm md:text-base mt-2 h-7"
+        >
           <span className="text-sm-red/40">» </span>
           <GlitchText />
         </motion.div>
 
-        <motion.p variants={item} className="mt-7 text-white/45 font-body text-base md:text-lg max-w-xl leading-relaxed">
-          B.Tech CSE student at Arya College, Jaipur (2027). I don't just write code — I orchestrate AI tools to ship real products fast. Vibe coder. Builder. Lifter.
+        {/* Bio text with cursor-proximity word highlighting */}
+        <motion.p variants={item} className="mt-7">
+          <InteractiveText className="text-white/40 font-body text-base md:text-lg max-w-xl leading-relaxed inline">
+            B.Tech CSE student at Arya College, Jaipur (2027). I don't just write code — I orchestrate AI tools to ship real products fast. Vibe coder. Builder. Lifter.
+          </InteractiveText>
         </motion.p>
 
         <motion.div variants={item} className="flex flex-wrap gap-4 mt-10">
@@ -172,25 +344,34 @@ export default function Hero() {
           </a>
         </motion.div>
 
-        {/* stats row */}
-        <motion.div variants={item} className="flex flex-wrap gap-8 md:gap-12 mt-16">
+        {/* stats */}
+        <motion.div
+          variants={item}
+          className="flex flex-wrap gap-8 md:gap-12 mt-16"
+        >
           {[
             { num: '8+', label: 'CERTIFICATIONS' },
             { num: '4+', label: 'PROJECTS SHIPPED' },
             { num: '2027', label: 'GRADUATING' },
             { num: '∞', label: 'VIBE LEVEL' },
-          ].map(s => (
+          ].map((s) => (
             <div key={s.label} className="group">
-              <div className="font-display text-4xl sm-red group-hover:text-sm-gold transition-colors duration-300">{s.num}</div>
-              <div className="font-mono text-[10px] text-white/25 tracking-[3px] mt-1">{s.label}</div>
+              <div className="font-display text-4xl sm-red group-hover:text-sm-gold transition-colors duration-300">
+                {s.num}
+              </div>
+              <div className="font-mono text-[10px] text-white/25 tracking-[3px] mt-1">
+                {s.label}
+              </div>
             </div>
           ))}
         </motion.div>
       </motion.div>
 
       {/* scroll hint */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2">
-        <span className="font-mono text-[9px] tracking-[4px] text-white/15 uppercase">SCROLL</span>
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-[5]">
+        <span className="font-mono text-[9px] tracking-[4px] text-white/15 uppercase">
+          SCROLL
+        </span>
         <motion.div
           className="w-px h-12 bg-gradient-to-b from-sm-red/50 to-transparent"
           animate={{ opacity: [0.3, 1, 0.3] }}
