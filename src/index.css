@@ -1,0 +1,97 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { cursor: none !important; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #06060a;
+  font-family: 'Outfit', sans-serif;
+  color: #e2e8ff;
+  overflow-x: hidden;
+}
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: #06060a; }
+::-webkit-scrollbar-thumb { background: #c8ff57; border-radius: 2px; }
+
+@layer utilities {
+  .neon-lime {
+    color: #c8ff57;
+    text-shadow: 0 0 16px #c8ff57aa, 0 0 40px #c8ff5750;
+  }
+  .neon-pink {
+    color: #ff2d78;
+    text-shadow: 0 0 16px #ff2d78aa, 0 0 40px #ff2d7850;
+  }
+  .neon-blue {
+    color: #00d4ff;
+    text-shadow: 0 0 16px #00d4ffaa, 0 0 40px #00d4ff50;
+  }
+  .neon-purple {
+    color: #bf7aff;
+    text-shadow: 0 0 16px #bf7affaa, 0 0 40px #bf7aff50;
+  }
+  .glass {
+    background: rgba(255, 255, 255, 0.025);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(200, 255, 87, 0.1);
+  }
+  .glass-pink {
+    background: rgba(255, 45, 120, 0.04);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 45, 120, 0.15);
+  }
+  .glass-blue {
+    background: rgba(0, 212, 255, 0.04);
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+  }
+  .neon-border-lime {
+    border: 1px solid rgba(200, 255, 87, 0.25);
+    box-shadow: 0 0 16px rgba(200, 255, 87, 0.1), inset 0 0 16px rgba(200, 255, 87, 0.03);
+  }
+  .neon-border-pink {
+    border: 1px solid rgba(255, 45, 120, 0.3);
+    box-shadow: 0 0 16px rgba(255, 45, 120, 0.1);
+  }
+  .pixel-bg {
+    background-image:
+      linear-gradient(rgba(200,255,87,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,255,87,0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .glow-radial {
+    background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(200,255,87,0.1) 0%, transparent 70%);
+  }
+  .font-display { font-family: 'Syne', sans-serif; }
+  .font-mono    { font-family: 'Fira Code', monospace; }
+  .font-body    { font-family: 'Outfit', sans-serif; }
+}
+
+/* Scan line effect */
+.scanline {
+  pointer-events: none;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(200,255,87,0.4), transparent);
+  animation: scan 8s linear infinite;
+  z-index: 9990;
+}
+
+@keyframes scan {
+  0%   { top: -2px; }
+  100% { top: 100vh; }
+}
+
+/* Section reveal */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
