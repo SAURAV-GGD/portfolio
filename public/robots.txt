@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sauravggd-portfolio-1ckj.vercel.app/sitemap.xml
