@@ -106,7 +106,7 @@ export default function Projects() {
           className="text-center mt-12"
         >
           <a
-            href="https://github.com/Godgiftedevil"
+            href="https://github.com/SAURAV-GGD"
             target="_blank"
             rel="noreferrer"
             className="inline-flex items-center gap-2 font-mono text-sm text-white/25 hover:text-sm-red transition-colors duration-200 tracking-[3px]"

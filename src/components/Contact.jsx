@@ -137,7 +137,7 @@ const socialLinks = [
   {
     label: 'Github',
     hoverLabel: 'Backup here\u{1FAE3}',
-    href: 'https://github.com/Godgiftedevil',
+    href: 'https://github.com/SAURAV-GGD',
   },
   {
     label: 'Instagram',

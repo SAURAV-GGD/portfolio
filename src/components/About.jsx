@@ -29,8 +29,8 @@ function GitHubStats() {
     async function fetchStats() {
       try {
         const [userRes, eventsRes] = await Promise.all([
-          fetch('https://api.github.com/users/Godgiftedevil'),
-          fetch('https://api.github.com/users/Godgiftedevil/events?per_page=100'),
+          fetch('https://api.github.com/users/SAURAV-GGD'),
+          fetch('https://api.github.com/users/SAURAV-GGD/events?per_page=100'),
         ])
         const user = await userRes.json()
         const events = await eventsRes.json()
@@ -88,12 +88,12 @@ function GitHubStats() {
         </svg>
         <span className="font-mono text-sm text-white/50 tracking-[2px]">GITHUB STATS</span>
         <a
-          href="https://github.com/Godgiftedevil"
+          href="https://github.com/SAURAV-GGD"
           target="_blank"
           rel="noreferrer"
           className="ml-auto font-mono text-[10px] text-sm-red/50 tracking-wider hover:text-sm-red transition-colors"
         >
-          @Godgiftedevil ↗
+          @SAURAV-GGD ↗
         </a>
       </div>
 
@@ -124,7 +124,7 @@ function GitHubStreak() {
   useEffect(() => {
     async function fetchStreak() {
       try {
-        const res = await fetch('https://api.github.com/users/Godgiftedevil/events?per_page=100')
+        const res = await fetch('https://api.github.com/users/SAURAV-GGD/events?per_page=100')
         const events = await res.json()
         if (!Array.isArray(events)) { setStreak({ current: 1, longest: 4, total: 82 }); return }
 

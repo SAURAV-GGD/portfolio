@@ -328,7 +328,7 @@ export default function Hero() {
             VIEW PROJECTS →
           </a>
           <a
-            href="https://github.com/Godgiftedevil"
+            href="https://github.com/SAURAV-GGD"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-2 px-7 py-3.5 glass glow-border-red font-mono text-sm text-sm-red tracking-[2px] rounded hover:scale-105 transition-all duration-300"
