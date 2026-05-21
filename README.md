@@ -7,6 +7,8 @@
 ## 🚀 Local Dev
 
 ```bash
+git clone https://github.com/SAURAV-GGD/portfolio.git
+cd portfolio
 npm install
 npm run dev
 ```
