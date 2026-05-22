@@ -277,7 +277,7 @@ export default function Hero() {
           variants={item}
           className="font-mono text-[11px] tracking-[5px] text-sm-red/60 mb-6 uppercase"
         >
-          » HELLO WORLD · JAIPUR, INDIA
+            » HELLO WORLD · BIHAR {'<->'} JAIPUR, INDIA
         </motion.div>
 
         <motion.h1 variants={item} className="font-display leading-[0.9] mb-5">

@@ -1,5 +1,6 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
+import TiltCard from './TiltCard.jsx'
 
 function SectionHeader({ num, title }) {
   return (
@@ -56,12 +57,12 @@ function GitHubStats() {
 
   if (loading) {
     return (
-      <div className="rounded-xl p-6 animate-pulse" style={{ border: '1px solid rgba(255,49,49,0.1)', background: 'rgba(255,255,255,0.02)' }}>
+      <TiltCard className="rounded-xl p-6 animate-pulse" style={{ border: '1px solid rgba(255,49,49,0.1)', background: 'rgba(255,255,255,0.02)' }}>
         <div className="h-5 bg-white/5 rounded w-32 mb-4" />
         <div className="grid grid-cols-2 gap-4">
           {[1,2,3,4].map(i => <div key={i} className="h-16 bg-white/5 rounded" />)}
         </div>
-      </div>
+      </TiltCard>
     )
   }
 
@@ -73,7 +74,7 @@ function GitHubStats() {
   ]
 
   return (
-    <div
+    <TiltCard
       className="rounded-xl p-6"
       style={{
         border: '1px solid rgba(255,49,49,0.12)',
@@ -100,7 +101,7 @@ function GitHubStats() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 gap-3">
         {statItems.map(s => (
-          <div
+          <TiltCard
             key={s.label}
             className="rounded-lg p-4 text-center group transition-all duration-300 hover:scale-[1.03]"
             style={{
@@ -110,10 +111,10 @@ function GitHubStats() {
           >
             <div className="font-display text-3xl transition-colors duration-300" style={{ color: s.color }}>{s.value}</div>
             <div className="font-mono text-[9px] text-white/30 tracking-[2px] mt-1">{s.label}</div>
-          </div>
+          </TiltCard>
         ))}
       </div>
-    </div>
+    </TiltCard>
   )
 }
 
@@ -161,7 +162,7 @@ function GitHubStreak() {
   if (!streak) return null
 
   return (
-    <div
+    <TiltCard
       className="rounded-xl p-6"
       style={{
         border: '1px solid rgba(255,215,0,0.1)',
@@ -175,20 +176,20 @@ function GitHubStreak() {
       </div>
 
       <div className="grid grid-cols-3 gap-3">
-        <div className="text-center p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+        <TiltCard className="text-center p-3 rounded-lg" tilt={8} glare={false} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
           <div className="font-display text-2xl text-white/70">{streak.total}</div>
           <div className="font-mono text-[8px] text-white/25 tracking-[2px] mt-1">ACTIVE DAYS</div>
-        </div>
-        <div className="text-center p-3 rounded-lg" style={{ background: 'rgba(255,49,49,0.04)', border: '1px solid rgba(255,49,49,0.12)' }}>
+        </TiltCard>
+        <TiltCard className="text-center p-3 rounded-lg" tilt={8} glare={false} style={{ background: 'rgba(255,49,49,0.04)', border: '1px solid rgba(255,49,49,0.12)' }}>
           <div className="font-display text-2xl sm-red">{streak.current}</div>
           <div className="font-mono text-[8px] text-white/25 tracking-[2px] mt-1">CURRENT</div>
-        </div>
-        <div className="text-center p-3 rounded-lg" style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
+        </TiltCard>
+        <TiltCard className="text-center p-3 rounded-lg" tilt={8} glare={false} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)' }}>
           <div className="font-display text-2xl sm-gold">{streak.longest}</div>
           <div className="font-mono text-[8px] text-white/25 tracking-[2px] mt-1">LONGEST</div>
-        </div>
+        </TiltCard>
       </div>
-    </div>
+    </TiltCard>
   )
 }
 
@@ -197,13 +198,10 @@ function Lang3DCard({ name, percentage, color, icon }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <motion.div
+    <TiltCard
       className="relative group"
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      whileHover={{ scale: 1.05, rotateY: 12, rotateX: -5 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-      style={{ perspective: '800px', transformStyle: 'preserve-3d' }}
     >
       <div
         className="rounded-xl p-4 text-center transition-all duration-300"
@@ -265,7 +263,7 @@ function Lang3DCard({ name, percentage, color, icon }) {
           style={{ background: color }}
         />
       )}
-    </motion.div>
+    </TiltCard>
   )
 }
 
@@ -281,7 +279,7 @@ function TopLanguages() {
   ]
 
   return (
-    <div
+    <TiltCard
       className="rounded-xl p-6"
       style={{
         border: '1px solid rgba(155,89,182,0.1)',
@@ -306,7 +304,7 @@ function TopLanguages() {
           </motion.div>
         ))}
       </div>
-    </div>
+    </TiltCard>
   )
 }
 
@@ -344,15 +342,17 @@ export default function About() {
             {/* traits */}
             <div className="flex flex-wrap gap-2 mt-8">
               {traits.map((t, i) => (
-                <motion.div
+                <TiltCard
                   key={t.label}
                   initial={{ opacity: 0, scale: 0.8 }}
                   animate={inView ? { opacity: 1, scale: 1 } : {}}
                   transition={{ delay: 0.3 + i * 0.06 }}
                   className="street-card flex items-center gap-2 px-3 py-1.5 rounded font-mono text-[11px] text-white/50"
+                  tilt={7}
+                  glare={false}
                 >
                   <span>{t.icon}</span> {t.label}
-                </motion.div>
+                </TiltCard>
               ))}
             </div>
           </motion.div>

@@ -1,4 +1,29 @@
-node_modules
-dist
+# Node modules and build output
+node_modules/
+dist/
+
+# Environment files (do NOT commit secrets)
+.env
+.env.*
+
+# Vite / tooling cache
+.vite/
+.cache/
+
+# Editor directories
+.vscode/
+.idea/
+
+# macOS
 .DS_Store
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage
+coverage/
+
+# Local pattern files
 *.local

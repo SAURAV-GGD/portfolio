@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef, useState } from 'react'
 import { skills } from '../data/index.js'
+import TiltCard from './TiltCard.jsx'
 
 /* ──────────── Category colors ──────────── */
 const groupColors = {
@@ -38,7 +39,7 @@ function SkillRow({ group, tags, color, description, index, visible }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <motion.div
+    <TiltCard
       className="skill-row group relative"
       initial={{ opacity: 0, x: -60 }}
       animate={visible ? { opacity: 1, x: 0 } : {}}
@@ -137,7 +138,7 @@ function SkillRow({ group, tags, color, description, index, visible }) {
           opacity: hovered ? 0 : 1,
         }}
       />
-    </motion.div>
+    </TiltCard>
   )
 }
 

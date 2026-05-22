@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { experience } from '../data/index.js'
+import TiltCard from './TiltCard.jsx'
 
 const smExpColors = ['#FF3131', '#FFD700', '#FF6B35', '#9B59B6', '#FF3131']
 
@@ -53,7 +54,7 @@ export default function Experience() {
                   />
 
                   {/* card */}
-                  <div
+                  <TiltCard
                     className="street-card rounded-xl p-6"
                     style={{ border: `1px solid ${accent}12` }}
                   >
@@ -78,7 +79,7 @@ export default function Experience() {
                         </li>
                       ))}
                     </ul>
-                  </div>
+                  </TiltCard>
                 </motion.div>
               )
             })}

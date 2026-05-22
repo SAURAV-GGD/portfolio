@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { projects } from '../data/index.js'
+import TiltCard from './TiltCard.jsx'
 
 const smAccents = ['#FF3131', '#FFD700', '#FF6B35', '#9B59B6']
 
@@ -35,7 +36,7 @@ export default function Projects() {
           {projects.map((p, i) => {
             const accent = smAccents[i % smAccents.length]
             return (
-              <motion.div
+              <TiltCard
                 key={p.id}
                 initial={{ opacity: 0, y: 32 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -93,7 +94,7 @@ export default function Projects() {
                 >
                   <GithubIcon /> VIEW ON GITHUB ↗
                 </a>
-              </motion.div>
+              </TiltCard>
             )
           })}
         </div>

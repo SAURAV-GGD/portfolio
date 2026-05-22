@@ -1,12 +1,14 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef, useState, useEffect } from 'react'
+import TiltCard from './TiltCard.jsx'
 
 /* ── Hover Reveal Link — minhpham style ── */
 function RevealLink({ label, hoverLabel, href, external = true, delay = 0, inView }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <motion.a
+    <TiltCard
+      as="a"
       href={href}
       target={external ? '_blank' : undefined}
       rel={external ? 'noreferrer' : undefined}
@@ -73,7 +75,7 @@ function RevealLink({ label, hoverLabel, href, external = true, delay = 0, inVie
           {hovered ? hoverLabel : label}
         </span>
       </div>
-    </motion.a>
+    </TiltCard>
   )
 }
 
@@ -83,7 +85,8 @@ function InfoReveal({ label, value, hoverText, href, delay = 0, inView }) {
   const [hovered, setHovered] = useState(false)
 
   return (
-    <motion.a
+    <TiltCard
+      as="a"
       href={href}
       target={href.startsWith('mailto:') || href.startsWith('tel:') ? undefined : '_blank'}
       rel="noreferrer"
@@ -127,7 +130,7 @@ function InfoReveal({ label, value, hoverText, href, delay = 0, inView }) {
           {value}
         </div>
       </div>
-    </motion.a>
+    </TiltCard>
   )
 }
 

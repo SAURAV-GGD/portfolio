@@ -1,6 +1,7 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { certifications } from '../data/index.js'
+import TiltCard from './TiltCard.jsx'
 
 const smCertColors = ['#FF3131', '#FFD700', '#FF6B35', '#9B59B6', '#FF3131', '#FFD700', '#FF6B35', '#9B59B6']
 
@@ -34,12 +35,12 @@ export default function Certifications() {
           {certifications.map((c, i) => {
             const accent = smCertColors[i % smCertColors.length]
             return (
-              <motion.div
+              <TiltCard
                 key={i}
                 initial={{ opacity: 0, scale: 0.92 }}
                 animate={inView ? { opacity: 1, scale: 1 } : {}}
                 transition={{ duration: 0.5, delay: i * 0.06, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="relative street-card rounded-xl p-5 flex flex-col gap-3 overflow-hidden"
+                className="relative group street-card rounded-xl p-5 flex flex-col gap-3 overflow-hidden"
                 style={{ border: `1px solid ${accent}12` }}
               >
                 {/* left accent bar */}
@@ -96,7 +97,7 @@ export default function Certifications() {
                     background: `radial-gradient(ellipse 80% 60% at 50% 0%, ${accent}08 0%, transparent 70%)`,
                   }}
                 />
-              </motion.div>
+              </TiltCard>
             )
           })}
         </div>
