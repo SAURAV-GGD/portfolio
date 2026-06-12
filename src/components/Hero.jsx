@@ -336,7 +336,7 @@ export default function Hero() {
             GITHUB ↗
           </a>
           <a
-            href="/Saurav_Kumar_Resume.docx"
+            href="/Saurav_Kumar_Resume-1.pdf"
             download
             className="flex items-center gap-2 px-7 py-3.5 glass border border-white/10 font-mono text-sm text-white/50 tracking-[2px] rounded hover:text-white hover:border-white/25 transition-all duration-300"
           >
