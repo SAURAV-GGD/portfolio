@@ -88,22 +88,46 @@ const GodVideoBackground = memo(function GodVideoBackground({ visible }) {
   const videoRef = useRef(null)
   const started = useRef(false)
 
+  // Set critical attributes at DOM level for iOS Safari
   useEffect(() => {
     const vid = videoRef.current
     if (!vid) return
-
-    // Ensure loop + muted at DOM level
-    vid.loop = true
+    vid.setAttribute('playsinline', '')
+    vid.setAttribute('webkit-playsinline', '')
+    vid.setAttribute('muted', '')
     vid.muted = true
+    vid.loop = true
+    vid.playsInline = true
+  }, [])
 
-    // Only start when tech stack section is reached
-    if (visible && !started.current) {
-      started.current = true
-      vid.currentTime = 0
-      vid.play().catch(() => {
-        const handler = () => { vid.play().catch(() => {}); document.removeEventListener('click', handler) }
-        document.addEventListener('click', handler, { once: true })
-      })
+  // Start playing when section becomes visible
+  useEffect(() => {
+    const vid = videoRef.current
+    if (!vid || !visible || started.current) return
+
+    started.current = true
+    vid.currentTime = 0
+
+    const tryPlay = () => {
+      vid.muted = true
+      const p = vid.play()
+      if (p && p.catch) p.catch(() => {})
+    }
+
+    tryPlay()
+
+    // Fallback: if autoplay blocked, retry on first user interaction (touch or click)
+    const retryOnInteraction = () => {
+      tryPlay()
+      document.removeEventListener('touchstart', retryOnInteraction)
+      document.removeEventListener('click', retryOnInteraction)
+    }
+    document.addEventListener('touchstart', retryOnInteraction, { once: true, passive: true })
+    document.addEventListener('click', retryOnInteraction, { once: true })
+
+    return () => {
+      document.removeEventListener('touchstart', retryOnInteraction)
+      document.removeEventListener('click', retryOnInteraction)
     }
   }, [visible])
 
@@ -117,7 +141,6 @@ const GodVideoBackground = memo(function GodVideoBackground({ visible }) {
         vid.muted = true
         vid.play().catch(() => {})
       }
-      // Seamless loop safety
       if (vid.duration && vid.currentTime >= vid.duration - 0.1) {
         vid.currentTime = 0
       }
@@ -133,7 +156,7 @@ const GodVideoBackground = memo(function GodVideoBackground({ visible }) {
       animate={{ opacity: visible ? 1 : 0 }}
       transition={{ duration: 1.5 }}
     >
-      {/* Full-section video */}
+      {/* Full-section video — mobile-safe attributes */}
       <video
         ref={videoRef}
         src="/GOD.mp4"
@@ -141,6 +164,9 @@ const GodVideoBackground = memo(function GodVideoBackground({ visible }) {
         muted
         playsInline
         preload="auto"
+        webkit-playsinline=""
+        x-webkit-airplay="deny"
+        disablePictureInPicture
         className="absolute inset-0 w-full h-full object-cover"
         style={{ filter: 'brightness(0.45) contrast(1.15)', pointerEvents: 'none' }}
       />
