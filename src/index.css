@@ -4,7 +4,7 @@
 
 * { cursor: none !important; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+html { /* scroll handled by SmoothScroll.jsx */ }
 
 body {
   background: #0a0a0a;
@@ -337,4 +337,60 @@ body {
   cursor: none;
   transition: color 0.2s ease, text-shadow 0.2s ease;
 }
+
+/* ═══════════════════════════════════════════════
+   PREMIUM HERO — Cinematic Styles
+   ═══════════════════════════════════════════════ */
+
+/* Heading accent — last line gradient */
+.hero-heading-accent {
+  background: linear-gradient(135deg, #FF1E3C 0%, #FF6B35 40%, #FFD700 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scroll hint pulse */
+.hero-scroll-line {
+  animation: scrollLinePulse 2.5s ease-in-out infinite;
+}
+@keyframes scrollLinePulse {
+  0%, 100% { opacity: 0.3; transform: scaleY(1); }
+  50% { opacity: 0.8; transform: scaleY(1.1); }
+}
+
+/* Primary CTA hover glow */
+.hero-btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.hero-btn-primary:hover::before {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════════
+   ACCESSIBILITY — Reduced Motion
+   ═══════════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .hero-scroll-line,
+  .grain-overlay {
+    animation: none !important;
+  }
+
+  .hero-btn-primary:hover {
+    transform: none !important;
+  }
+
+  /* Disable all GSAP-like transitions — let GSAP handle this via JS */
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
 

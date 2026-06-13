@@ -20,6 +20,7 @@ export default {
       },
       fontFamily: {
         display: ['"Anton"', 'sans-serif'],
+        heading: ['"Inter"', 'sans-serif'],
         body:    ['"Space Grotesk"', 'sans-serif'],
         mono:    ['"JetBrains Mono"', 'monospace'],
       },
