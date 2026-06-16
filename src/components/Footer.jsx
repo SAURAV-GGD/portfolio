@@ -4,17 +4,41 @@ const Panel = lazy(() => import('./NightWatchers.jsx'))
 
 export default function Footer() {
   const [data, setData] = useState(null)
+  const [pass, setPass] = useState(null)
 
   const open = async () => {
-    const pass = window.prompt('')
-    if (!pass) return
+    const entered = window.prompt('')
+    if (!entered) return
+    try {
+      const res = await fetch(`/api/night-watchers?pass=${encodeURIComponent(entered)}`)
+      if (!res.ok) {
+        console.error(`[night-watchers] open failed: HTTP ${res.status}`)
+        return
+      }
+      setData(await res.json())
+      setPass(entered)
+    } catch (err) {
+      console.error('[night-watchers] open failed:', err)
+    }
+  }
+
+  // Re-fetch the latest snapshot for the live feed. Returns null on failure so
+  // the panel can keep showing its last good data.
+  const refresh = async () => {
+    if (!pass) return null
     try {
       const res = await fetch(`/api/night-watchers?pass=${encodeURIComponent(pass)}`)
-      if (!res.ok) return
-      setData(await res.json())
-    } catch {
-      /* noop */
+      if (!res.ok) return null
+      return await res.json()
+    } catch (err) {
+      console.error('[night-watchers] refresh failed:', err)
+      return null
     }
+  }
+
+  const close = () => {
+    setData(null)
+    setPass(null)
   }
 
   return (
@@ -45,7 +69,7 @@ export default function Footer() {
             </div>
           }
         >
-          <Panel data={data} onClose={() => setData(null)} />
+          <Panel data={data} refresh={refresh} onClose={close} />
         </Suspense>
       )}
     </footer>
