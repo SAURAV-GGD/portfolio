@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Analytics } from '@vercel/analytics/react'
 import Cursor         from './components/Cursor.jsx'
 import DockNavbar     from './components/DockNavbar.jsx'
 import PremiumHero    from './components/PremiumHero.jsx'
@@ -46,6 +47,7 @@ export default function App() {
       </main>
 
       <Footer />
+      <Analytics />
     </div>
   )
 }
